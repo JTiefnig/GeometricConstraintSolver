@@ -11,6 +11,10 @@ class INumericTypes
 public:
 	INumericTypes();
 	~INumericTypes();
+
+	virtual int getM()=0;
+	virtual int getN()=0;
+
 };
 
 

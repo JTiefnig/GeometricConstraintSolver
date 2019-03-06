@@ -27,8 +27,6 @@ class ModelParameter;
 class IExpression : public SymbolicMathElement
 {
 
-	
-
 public:
 
 	IExpression() {}
@@ -47,12 +45,20 @@ public:
 
 	virtual IExpression & unWrap() { return *this; }
 	virtual const IExpression & unWrap() const { return *this; }
+
+
+
+
+	// think about hashing ... 00000 .. 
+	//virtual bool compare(const Expression&) = 0;
+	//virtual Expression substitute(const Expression&, const Expression&) =0;
+
 	
 };
 
 
 
-// Kind of an Container // an expresion is not an Eaquation 
+// Kind of an Container AK Proxy// an expresion is not an Eaquation // difficulties Comparison
 // an equation consists of two Expressions
 class Expression : public IExpression // Check 
 {
@@ -254,6 +260,9 @@ public:
 	}
 
 	virtual Expression simplify() const override;
+
+	// Get name
+	// Get value // 
 };
 
 
