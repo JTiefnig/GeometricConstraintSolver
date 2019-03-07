@@ -36,5 +36,11 @@ public:
 	virtual Expression simplify() const override;
 
 
+
+	// Geerbt über IExpression
+	virtual void reHash() override;
+
+	virtual Expression substitute(const Expression &, const Expression &) override;
+
 };
 

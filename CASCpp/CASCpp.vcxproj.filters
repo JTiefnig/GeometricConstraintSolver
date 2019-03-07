@@ -39,6 +39,9 @@
     <ClInclude Include="SymbolicMathElement.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="IHashId.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -63,6 +66,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="SymbolicMathElement.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="IHashId.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,10 +1,12 @@
 #pragma once
 #include "ISketchEntity.h"
+#include <string>
+
 class Entity :
 	public ISketchEntity
 {
 public:
-	Entity();
+	Entity(std::string ID);
 	~Entity();
 };
 

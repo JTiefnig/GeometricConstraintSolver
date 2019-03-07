@@ -92,34 +92,61 @@ Expression Expression::simplify() const
 	return A->simplify();
 }
 
+void Expression::reHash()
+{
+	A -> reHash();
+	this->hash = A->getHash();
+}
+
+hashid Expression::getHash() const
+{
+	return A->getHash();
+}
+
+
+Expression Expression::substitute(const Expression &a, const Expression &b)
+{
+	auto ret = A->substitute(a, b);
+
+	if (ret->compare(a))
+		return b;
+
+	return ret;
+}
+
 
 Plus::Plus(const IExpression & a, const IExpression & b)
 {
+	
 	if (a.unWrap().type() == this->type())
 	{
 		auto pa = dynamic_cast<const Plus&>(a.unWrap());
 		this->exps.insert(this->exps.end(), pa.exps.begin(), pa.exps.end());
 	}
-	else exps.push_back(a.unWrap());
+	else exps.push_back(a);
 
 	if (b.unWrap().type() == this->type())
 	{
 		auto pb = dynamic_cast<const Plus&>(b.unWrap());
 		this->exps.insert(this->exps.end(), pb.exps.begin(), pb.exps.end());
 	}
-	else exps.push_back(b.unWrap());
+	else exps.push_back(b);
 
+
+	this->reHash();
 }
 
 Plus Plus::operator+=(const IExpression & a)
 {
 	this->exps.push_back(a);
+	this->reHash();
 	return *this;
 }
 
 Plus Plus::operator-=(const IExpression & a)
 {
-	this->exps.push_back(-a);
+	this->exps.push_back(-1*a);
+	this->reHash();
 	return *this;
 }
 
@@ -158,7 +185,7 @@ Expression Plus::partDif(ModelParameter & p)
 	Plus ret;
 
 	for (auto & e : exps)
-		ret += e.partDif(p);
+		ret += e->partDif(p);
 
 	return ret;
 }
@@ -186,40 +213,159 @@ Expression Plus::simplify() const
 	return ret;
 }
 
+void Plus::reHash()
+{
+	this->hash =NULL; // Wors for now // think this will be problem when i implement a database
 
+	for (auto & exp : exps)
+	{
+		this->hash ^= (exp.getHash() & type());
+	}
+
+}
+
+Expression Plus::substitute(const Expression &a, const Expression &b)
+{
+	if (this->compare(a))
+		return b;
+
+
+	Plus ret;
+	// try subst components
+	for (auto & exp : exps)
+	{
+		ret += exp.substitute(a, b);
+	}
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
+}
+
+
+
+Multiply::Multiply(const IExpression & a, const IExpression & b)
+{
+
+	if (a.unWrap().type() == this->type())
+	{
+		auto pa = dynamic_cast<const Multiply&>(a.unWrap());
+		this->exps.insert(this->exps.end(), pa.exps.begin(), pa.exps.end());
+	}
+	else exps.push_back(a.unWrap());
+
+	if (b.unWrap().type() == this->type())
+	{
+		auto pb = dynamic_cast<const Multiply&>(b.unWrap());
+		this->exps.insert(this->exps.end(), pb.exps.begin(), pb.exps.end());
+	}
+	else exps.push_back(b.unWrap());
+
+
+	this->reHash();
+}
+
+Multiply Multiply::operator*=(const IExpression &a)
+{
+	this->exps.push_back(a);
+	this->reHash();
+	return *this;
+}
 
 double Multiply::eval() const
 {
-	return A->eval() * B->eval();
+	double ret = 1; 
+
+	for (auto &exp : exps)
+		ret *= exp.eval();
+
+	return ret;
 }
 
 std::string Multiply::toString() const
 {
 	stringstream ss;
-	ss << "(";
-	ss << A->toString();
-	ss << " * ";
-	ss << B->toString();
-	ss << ")";
 
+	for(list<Expression>::const_iterator exp = exps.begin(); exp!=exps.end() ; exp++)
+	{
+		if(exp != exps.begin())
+			ss << " * ";
+
+		ss << exp->toString();
+	}
 	return ss.str();
 }
 
 IExpression * Multiply::deepCopy() const
 {
-	return new Multiply(*A, *B);
+	return new Multiply(*this);
 }
 
 
 
 Expression Multiply::partDif(ModelParameter & p)
 {
-	return A->partDif(p) * (*B) + (*A) * B->partDif(p);
+	Plus ret;
+
+
+	for (list<Expression>::iterator exp = exps.begin(); exp != exps.end(); exp++)
+	{
+		Expression temp = *exp;
+		*exp = exp->partDif(p);
+		ret += *this;
+		*exp = temp;
+	}
+
+	return ret;
 }
 
 Expression Multiply::simplify() const
 {
-	return A->simplify() * B->simplify();
+	Multiply ret;
+
+	for (auto & exp : exps)
+	{
+		if (exp.unWrap().type() == this->type())
+		{
+			auto mult = dynamic_cast<const Multiply*>(&(exp.unWrap()));
+			for (auto & m : mult->exps)
+				ret.exps.push_back(m);
+		}
+		else
+		{
+			ret *= exp.simplify();
+		}
+	}
+
+	return ret;
+}
+
+void Multiply::reHash()
+{
+	this->hash = NULL; // Works for now // think this will be problem when i implement a database
+
+	for (auto & exp : exps)
+	{
+		this->hash ^= (exp.getHash() & type());
+	}
+
+}
+
+Expression Multiply::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Multiply ret;
+
+	for (auto &exp : exps)
+		ret *= exp.substitute(a, b);
+	
+	if (ret.compare(a))
+		return b;
+
+	return ret;
 }
 
 double Power::eval() const
@@ -251,6 +397,19 @@ Expression Power::partDif(ModelParameter & p)
 Expression Power::simplify() const
 {
 	return Power(A->simplify(), B->simplify());
+}
+
+Expression Power::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Power ret(A->substitute(a, b), B->substitute(a, b));
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
 }
 
 double Root::eval() const
@@ -287,6 +446,19 @@ Expression Root::partDif(ModelParameter & p)
 	return Power(*A, 1/ *B ).partDif(p); // TODO make this better
 }
 
+Expression Root::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Root ret(A->substitute(a, b), B->substitute(a, b));
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
+}
+
 double Log::eval() const
 {
 	return log(B->eval())/log(A->eval());
@@ -315,6 +487,19 @@ Expression Log::simplify() const
 Expression Log::partDif(ModelParameter & p)
 {
 	return (*A- B->partDif(p) - *B * *this * A->partDif(p)) / (*A * *B * ln(*A));
+}
+
+Expression Log::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Log ret(A->substitute(a, b), B->substitute(a, b));
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
 }
 
 std::string Sqrt::toString() const
@@ -359,6 +544,20 @@ Expression Constant::partDif(ModelParameter & p)
 	return Constant(0);
 }
 
+void Constant::reHash()
+{
+	std::hash<double> hf;
+	this->hash = hf(val);
+}
+
+Expression Constant::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	return *this;
+}
+
 Expression Parameter::simplify() const
 {
 	return *this;
@@ -397,6 +596,20 @@ Expression Abs::simplify() const
 	return Abs(A->simplify());
 }
 
+
+Expression Abs::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Abs ret(A->substitute(a, b));
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
+}
+
 double ModelParameter::eval() const 
 {
 	return val;
@@ -419,6 +632,20 @@ Expression ModelParameter::partDif(ModelParameter & p)
 		return Constant(1);
 
 	return Constant(0);
+}
+
+void ModelParameter::reHash()
+{
+	std::hash<std::string> hf;
+	this->hash = hf(name);
+}
+
+Expression ModelParameter::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	return *this;
 }
 
 double Sin::eval() const
@@ -449,6 +676,20 @@ IExpression * Sin::deepCopy() const
 Expression Sin::simplify() const
 {
 	return Sin(A->simplify());
+}
+
+
+Expression Sin::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Sin ret(A->substitute(a, b));
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
 }
 
 std::string Division::toString() const
@@ -482,7 +723,26 @@ Expression Division::partDif(ModelParameter & p)
 
 Expression Division::simplify() const
 {
-	return Expression();
+	return Division(A->simplify(), B->simplify());
+}
+
+void Division::reHash()
+{
+	this->hash = A->getHash() & type() ^ B->getHash();
+}
+
+Expression Division::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Division ret(A->substitute(a, b), B->substitute(a, b));
+
+	if (ret->compare(a))
+		return b;
+
+
+	return ret;
 }
 
 Expression operator+(const Expression & a, const Expression & b)
@@ -587,7 +847,35 @@ Expression Cos::simplify() const
 	return Expression(); // TODO
 }
 
+Expression Cos::substitute(const Expression &a, const Expression &b)
+{
+	if (compare(a))
+		return b;
+
+	Cos ret(A->substitute(a, b));
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
+}
+
 Minus::Minus(const IExpression & a, const IExpression & b)
 	:Plus(a, -b)
 {
+}
+
+bool IExpression::compare(const Expression &b)
+{
+	return (this->getHash() == b.getHash());
+}
+
+void Function::reHash()
+{
+	this->hash = ( type() & ~A->getHash());
+}
+
+void TriangleOfPower::reHash()
+{
+	this->hash = ~(A->getHash() & type()) ^ (B->getHash() | type());
 }

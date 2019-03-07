@@ -2,10 +2,14 @@
 
 
 
-ISketchEntity::ISketchEntity()
-{
-}
 
+
+
+ISketchEntity::ISketchEntity(std::string ID)
+	:id(ID)
+{
+
+}
 
 ISketchEntity::~ISketchEntity()
 {

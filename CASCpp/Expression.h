@@ -24,6 +24,10 @@
 class Expression;
 class ModelParameter;
 
+
+
+
+
 class IExpression : public SymbolicMathElement
 {
 
@@ -46,13 +50,18 @@ public:
 	virtual IExpression & unWrap() { return *this; }
 	virtual const IExpression & unWrap() const { return *this; }
 
-
+	virtual IExpression * operator->()
+	{
+		return this;
+	} // Todo for const..
 
 
 	// think about hashing ... 00000 .. 
-	//virtual bool compare(const Expression&) = 0;
-	//virtual Expression substitute(const Expression&, const Expression&) =0;
+	virtual bool compare(const Expression&);
 
+	virtual Expression substitute(const Expression&, const Expression&) =0;
+
+	
 	
 };
 
@@ -66,10 +75,7 @@ class Expression : public IExpression // Check
 
 	// No public access to the pointer 
 
-protected:
-	Expression(IExpression* a)
-		:A(a)
-	{}
+
 	
 public:
 
@@ -79,7 +85,12 @@ public:
 
 	Expression(const IExpression& a) // implicit conversion
 	{
-		A = a.unWrap().deepCopy();	
+		A = a.unWrap().deepCopy();
+	}
+
+	Expression(const IExpression* a)	
+	{
+		A = a->deepCopy();
 	}
 
 	
@@ -117,29 +128,48 @@ public:
 
 	virtual Expression simplify() const override;
 
-
+	// Rethink this! 
 	virtual IExpression & unWrap() override { return A->unWrap(); }
 	virtual const IExpression & unWrap() const override { return A->unWrap(); }
+
+	virtual IExpression * operator->()
+	{
+		return A;
+	}
+
+
+	// Geerbt über IExpression
+	virtual void reHash() override;
+
+	virtual hashid getHash() const override;
+
+	virtual Expression substitute(const Expression &, const Expression &) override;
+
 };
 
 
 
-class Plus : virtual public IExpression// Summe 
-{
-protected:
 
+
+
+
+class Plus : virtual public IExpression
+{
+
+	// write a class Expression list that handles the dirty stuff
 	std::list<Expression> exps;
 
 public:
 
 	Plus()
 	{
+		reHash();
 	}
 	
 	Plus(const Plus & temp)
 		:exps(temp.exps)
 	{
-
+		reHash();
 	}
 
 	
@@ -162,6 +192,10 @@ public:
 	virtual Expression partDif(ModelParameter & b) override;
 
 	virtual Expression simplify() const override;
+
+	virtual void reHash() override;
+
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 
@@ -169,27 +203,33 @@ public:
 
 class Minus : public Plus 
 {
-
 public:
-
 	Minus(const IExpression & a, const IExpression& b);
 };
 
 
 
-
-
 class Multiply : virtual public IExpression
 {
-	IExpression *A, *B;
+
+	std::list<Expression> exps; // Maybe do that with IExpression Pointers later // for more speed and less memory usage
 
 public:
 
-	Multiply(const IExpression & a, const IExpression& b)
+	Multiply()
 	{
-		A = a.deepCopy();
-		B = b.deepCopy();
+		reHash();
 	}
+
+	Multiply(const Multiply & temp)
+		:exps(temp.exps)
+	{
+		reHash();
+	}
+
+	Multiply(const IExpression & a, const IExpression& b);
+
+	Multiply operator*=(const IExpression&);
 
 	// Geerbt über IExpression
 	virtual double eval() const override;
@@ -198,17 +238,18 @@ public:
 
 	virtual ~Multiply()
 	{
-		delete A;
-		delete B;
 	}
 
 	// Geerbt über IExpression
 	virtual Expression partDif(ModelParameter & p) override;
 
 	virtual Expression simplify() const override;
+
+
+	virtual void reHash() override;
+
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
-
-
 
 
 
@@ -223,6 +264,7 @@ public:
 	{
 		A = a.deepCopy();
 		B = b.deepCopy();
+		reHash();
 	}
 
 	virtual ~Division()
@@ -240,6 +282,10 @@ public:
 
 	virtual Expression partDif(ModelParameter & p) override;
 	virtual Expression simplify() const override;
+
+
+	virtual void reHash() override;
+	virtual Expression substitute(const Expression &, const Expression &) override;
 
 };
 
@@ -280,11 +326,15 @@ public:
 
 	Constant(double value)
 		:val(value)
-	{}
+	{
+		reHash();
+	}
 
 	Constant()
 		:val(0.0)
-	{}
+	{
+		reHash();
+	}
 
 	// asignment operator 
 	virtual double & operator = (const double &f) noexcept
@@ -296,7 +346,7 @@ public:
 	// conversion operator
 	virtual operator double const & () const
 	{
-		return this->val;
+		return this->val;// fuck about hashing!! // deshalb is er const!!
 	}
 
 	// Geerbt über Parameter
@@ -307,6 +357,9 @@ public:
 	virtual double eval() const override;
 
 	virtual Expression partDif(ModelParameter & p) override;
+
+	virtual void reHash() override;
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 
@@ -331,19 +384,19 @@ public:
 	ModelParameter(const std::string & Name)
 		:name(Name), val(0)
 	{
-
+		reHash();
 	}
 
 	ModelParameter(const std::string & Name, double value)
 		:name(Name), val(value)
 	{
-
+		reHash();
 	}
 
 	ModelParameter(const std::string & Name, double value, ModelParameterType ptype)
 		:name(Name), val(value), paramtype(ptype)
 	{
-
+		reHash();
 	}
 
 	
@@ -357,6 +410,10 @@ public:
 
 	virtual Expression partDif(ModelParameter & p) override;
 
+	virtual void reHash() override;
+
+	virtual Expression substitute(const Expression &, const Expression &) override;
+
 };
 
 
@@ -365,16 +422,25 @@ public:
 // Function 
 class Function : public IExpression
 {
+protected:
+	IExpression *A;
 
 public:
 	// Enforce some additional Methods
-
-
-	virtual Expression partDif(ModelParameter & p) override
+	Function(const IExpression & a)
 	{
-		throw "not implemented";
+		A = a.deepCopy();
+		reHash();
 	}
+	
 
+
+	virtual void reHash() override;
+	
+	~Function()
+	{
+		delete A;
+	}
 
 };
 
@@ -383,12 +449,12 @@ public:
 // this schould be linar .. somehow // but not lipschitz
 class Abs : public Function
 {
-	IExpression *A;
+	
 
 public: 
 	Abs(const IExpression & a)
+		:Function(a)
 	{
-		A = a.deepCopy();
 	}
 
 	// Geerbt über Function
@@ -403,6 +469,8 @@ public:
 	virtual Expression partDif(ModelParameter & p) override;
 
 	virtual Expression simplify() const override;
+	
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 
@@ -410,13 +478,12 @@ public:
 
 class Sin : public Function
 {
-	IExpression *A;
 
 public:
 
 	Sin(const IExpression & a)
+		:Function(a)
 	{
-		A = a.deepCopy();
 	}
 
 	// Geerbt über Function
@@ -428,23 +495,20 @@ public:
 
 	virtual IExpression * deepCopy() const override;
 
-
 	virtual Expression simplify() const override;
+
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 
 
 class Cos : public Function
 {
-	IExpression *A;
-
 public:
 
 	Cos(const IExpression & a)
-	{
-		A = a.deepCopy();
-	}
-
+		:Function(a)
+	{}
 
 
 	// Geerbt über Function
@@ -458,10 +522,12 @@ public:
 
 	virtual Expression simplify() const override;
 
+	virtual Expression substitute(const Expression &, const Expression &) override;
+
 };
 
 
-class TriangleOfPower : public Function
+class TriangleOfPower : public IExpression
 {
 protected:
 
@@ -469,7 +535,9 @@ protected:
 
 	TriangleOfPower(IExpression* a, IExpression* b)
 		:A(a), B(b)
-	{}
+	{
+		reHash();
+	}
 
 
 	virtual ~TriangleOfPower()
@@ -477,6 +545,14 @@ protected:
 		delete A;
 		delete B;
 	}
+
+	virtual Expression partDif(ModelParameter & p) override
+	{
+		throw "not implemented";
+	}
+
+	virtual void reHash() override;
+
 
 
 };
@@ -498,6 +574,9 @@ public:
 	virtual IExpression * deepCopy() const override;
 	virtual Expression partDif(ModelParameter & p) override;
 	virtual Expression simplify() const override;
+
+	// Geerbt über TriangleOfPower
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 class Log : public TriangleOfPower
@@ -518,6 +597,9 @@ public:
 	virtual IExpression * deepCopy() const override;
 	virtual Expression simplify() const override;
 	virtual Expression partDif(ModelParameter & p) override;
+
+	// Geerbt über TriangleOfPower
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 
@@ -537,6 +619,9 @@ public:
 	virtual IExpression * deepCopy() const override;
 	virtual Expression simplify() const override;
 	virtual Expression partDif(ModelParameter & p) override;
+
+	// Geerbt über TriangleOfPower
+	virtual Expression substitute(const Expression &, const Expression &) override;
 };
 
 

@@ -12,7 +12,8 @@ private:
 	const std::string id;
 
 public:
-	ISketchEntity();
+	ISketchEntity(std::string ID);
+
 	virtual ~ISketchEntity();
 
 	std::string getId();

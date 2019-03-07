@@ -3,11 +3,12 @@
 #include <typeinfo>
 #include <iostream>
 #include <exception>
+#include "IHashId.h"
 
 class IExpression;
 
 
-class SymbolicMathElement
+class SymbolicMathElement: public IHashId
 {
 public:
 	SymbolicMathElement();
