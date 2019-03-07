@@ -24,12 +24,11 @@ int main()
 
 	for (int i = 0; i < 4; i++)
 	{
-		d = Sin(d);
+		d = Sin(Log(a,b)) + d + cos(b);
 	}
 
-	cout << d->getHash() << endl;
-
 	cout << "before " << d.toString() << endl << endl;
+	d = d.partDif(b);
 
 	auto dd = d.substitute(Sin(b), x);
 
@@ -44,7 +43,7 @@ int main()
 	//system("explorer http://google.com"); // todo c
 
 
-	cout << d.toString() << endl;
+	
 	cout << "Eval: " << d.eval() << endl;
 
 
