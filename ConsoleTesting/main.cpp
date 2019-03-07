@@ -17,6 +17,7 @@ int main()
 
 
 	ModelParameter a = ModelParameter("A", 10.0);
+
 	Constant b = 2;
 
 	Expression d;
