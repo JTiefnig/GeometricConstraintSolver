@@ -150,6 +150,7 @@
     <ClInclude Include="Equation.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionMatrix.h" />
+    <ClInclude Include="IHashId.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="NumericTypes.h" />
     <ClInclude Include="stdafx.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Equation.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="ExpressionMatrix.cpp" />
+    <ClCompile Include="IHashId.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="NumericTypes.cpp" />

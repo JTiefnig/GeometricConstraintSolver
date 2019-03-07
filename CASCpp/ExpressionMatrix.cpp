@@ -75,3 +75,12 @@ Expression ExpressionMatrix::simplify() const
 
 	return ret;
 }
+
+void ExpressionMatrix::reHash()
+{
+}
+
+Expression ExpressionMatrix::substitute(const Expression &, const Expression &)
+{
+	return Expression();
+}

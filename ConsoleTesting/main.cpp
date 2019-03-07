@@ -14,36 +14,26 @@ using namespace std;
 
 int main()
 {
+	ModelParameter a("A", 10.0);
+	ModelParameter b("B", 12);
+
+	Expression x("W");
+
+	Expression d = b;
 
 
-	ModelParameter a = ModelParameter("A", 10.0);
-	Constant b = 2;
-
-	Expression d;
-
-	d = b - a;
-
-	cout << d.toString() << endl;
-
-	Expression dif;
-
-	ExpressionMatrix ex(4, 4, d); // need some kind of cool constructor for this 
-
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 4; i++)
 	{
-
-		Expression e(a);
-
-		Expression c = a + 1;
-
-		Expression y(c);
-
-		d = a ^ 2;
-
-		d = a + b - c * y - a;
-
-		dif = d.partDif(a);
+		d = Sin(d);
 	}
+
+	cout << d->getHash() << endl;
+
+	cout << "before " << d.toString() << endl << endl;
+
+	auto dd = d.substitute(Sin(b), x);
+
+	cout << "after " << dd.toString() << endl << endl;
 
 	//d = a * b + c - d+y;
 
@@ -57,9 +47,7 @@ int main()
 	cout << d.toString() << endl;
 	cout << "Eval: " << d.eval() << endl;
 
-	cout << "PartDif: " << dif.toString() << endl;
 
-	cout << "matrix: " << ex.toString() << endl;
 
 	system("PAUSE");
 	return 0;
