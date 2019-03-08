@@ -56,9 +56,6 @@ public:
 	} // Todo for const..
 
 
-	// think about hashing ... 00000 .. 
-	virtual bool compare(const Expression&);
-
 	virtual Expression substitute(const Expression&, const Expression&) =0;
 
 	
@@ -131,19 +128,18 @@ public:
 	// Rethink this! 
 	virtual IExpression & unWrap() override { return A->unWrap(); }
 	virtual const IExpression & unWrap() const override { return A->unWrap(); }
-
 	virtual IExpression * operator->()
 	{
 		return A;
 	}
 
-
-	// Geerbt über IExpression
 	virtual void reHash() override;
 
 	virtual hashid getHash() const override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
 
 };
 
@@ -196,6 +192,8 @@ public:
 	virtual void reHash() override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
 };
 
 
@@ -249,6 +247,9 @@ public:
 	virtual void reHash() override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	// Geerbt über IExpression
+	virtual bool contains(const SymbolicMathElement &) const override;
 };
 
 
@@ -287,6 +288,10 @@ public:
 	virtual void reHash() override;
 	virtual Expression substitute(const Expression &, const Expression &) override;
 
+
+	// Geerbt über IExpression
+	virtual bool contains(const SymbolicMathElement &) const override;
+
 };
 
 
@@ -309,6 +314,8 @@ public:
 
 	// Get name
 	// Get value // 
+
+	virtual bool contains(const SymbolicMathElement &) const override;
 };
 
 
@@ -360,6 +367,8 @@ public:
 
 	virtual void reHash() override;
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	
 };
 
 

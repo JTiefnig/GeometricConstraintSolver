@@ -114,6 +114,11 @@ Expression Expression::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
+bool Expression::contains(const SymbolicMathElement &a) const
+{
+	return A->contains(a);
+}
+
 
 Plus::Plus(const IExpression & a, const IExpression & b)
 {
@@ -243,6 +248,20 @@ Expression Plus::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
+bool Plus::contains(const SymbolicMathElement &a) const
+{
+	if(this->compare(a))
+		return true;
+
+	for (auto & exp : exps)
+	{
+		if (exp.contains(a))
+			return true;
+	}
+
+	return false;
+}
+
 
 
 Multiply::Multiply(const IExpression & a, const IExpression & b)
@@ -366,6 +385,17 @@ Expression Multiply::substitute(const Expression &a, const Expression &b)
 		return b;
 
 	return ret;
+}
+
+bool Multiply::contains(const SymbolicMathElement &) const
+{
+	for (auto & exp : exps)
+	{
+		if (exp.contains(a))
+			return true;
+	}
+
+	return false;
 }
 
 double Power::eval() const
@@ -558,9 +588,16 @@ Expression Constant::substitute(const Expression &a, const Expression &b)
 	return *this;
 }
 
+
+
 Expression Parameter::simplify() const
 {
 	return *this;
+}
+
+bool Parameter::contains(const SymbolicMathElement &) const
+{
+	return compare(a);
 }
 
 double Abs::eval() const
@@ -743,6 +780,14 @@ Expression Division::substitute(const Expression &a, const Expression &b)
 
 
 	return ret;
+}
+
+bool Division::contains(const SymbolicMathElement &a) const
+{
+	if (compare(a))
+		return true;
+
+	return false;
 }
 
 Expression operator+(const Expression & a, const Expression & b)

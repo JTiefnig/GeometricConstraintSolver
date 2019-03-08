@@ -21,6 +21,9 @@ public:
 	virtual void reHash()=0;
 
 	virtual hashid getHash() const;
+
+	virtual bool compare(const IHashId&) const ;
+
 };
 
 
