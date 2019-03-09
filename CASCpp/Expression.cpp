@@ -119,6 +119,11 @@ bool Expression::contains(const SymbolicMathElement &a) const
 	return A->contains(a);
 }
 
+void Expression::toLaTeX(std::ostream &o) const
+{
+	A->toLaTeX(o);
+}
+
 
 Plus::Plus(const IExpression & a, const IExpression & b)
 {
@@ -262,6 +267,16 @@ bool Plus::contains(const SymbolicMathElement &a) const
 	return false;
 }
 
+void Plus::toLaTeX(std::ostream &o) const
+{
+	for (list<Expression>::const_iterator exp = exps.begin(); exp != exps.end(); exp++)
+	{
+		if (exp != exps.begin())
+			o << "+";
+		exp->toLaTeX(o);
+	}
+}
+
 
 
 Multiply::Multiply(const IExpression & a, const IExpression & b)
@@ -387,7 +402,7 @@ Expression Multiply::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
-bool Multiply::contains(const SymbolicMathElement &) const
+bool Multiply::contains(const SymbolicMathElement &a) const
 {
 	for (auto & exp : exps)
 	{
@@ -396,6 +411,23 @@ bool Multiply::contains(const SymbolicMathElement &) const
 	}
 
 	return false;
+}
+
+void Multiply::toLaTeX(std::ostream &o) const
+{
+	for (list<Expression>::const_iterator exp = exps.begin(); exp != exps.end(); exp++)
+	{
+		if (exp != exps.begin())
+			o << "*"; // ge nur wenn exp == const && prev exp == const
+		if (exp->type() == typeid(Plus).hash_code())
+		{
+			o << "\\left( ";
+			exp->toLaTeX(o);
+			o << "\\right) ";
+		}
+		else
+			exp->toLaTeX(o);
+	}
 }
 
 double Power::eval() const
@@ -440,6 +472,15 @@ Expression Power::substitute(const Expression &a, const Expression &b)
 		return b;
 
 	return ret;
+}
+
+void Power::toLaTeX(std::ostream &o) const
+{
+	o << "{";
+	A->toLaTeX(o);
+	o << "}^{";
+	B->toLaTeX(o);
+	o << "}";
 }
 
 double Root::eval() const
@@ -489,6 +530,15 @@ Expression Root::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
+void Root::toLaTeX(std::ostream &o) const
+{
+	o << "\\sqrt[";
+	A->toLaTeX(o);
+	o << "]{";
+	B->toLaTeX(o);
+	o << "}";
+}
+
 double Log::eval() const
 {
 	return log(B->eval())/log(A->eval());
@@ -532,6 +582,15 @@ Expression Log::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
+void Log::toLaTeX(std::ostream &o) const
+{
+	o << "\\log_{";
+	A->toLaTeX(o);
+	o << "} \\left(";
+	B->toLaTeX(o);
+	o << "\\right)";
+}
+
 std::string Sqrt::toString() const
 {
 	stringstream ss;
@@ -550,6 +609,13 @@ IExpression * Sqrt::deepCopy() const
 Expression Sqrt::partDif(ModelParameter & p)
 {
 	return 0.5/Sqrt(*A) * A->partDif(p);
+}
+
+void Sqrt::toLaTeX(std::ostream &o) const
+{
+	o << "\\sqrt {";
+	B->toLaTeX(o);
+	o << "}";
 }
 
 std::string Constant::toString() const
@@ -588,6 +654,11 @@ Expression Constant::substitute(const Expression &a, const Expression &b)
 	return *this;
 }
 
+void Constant::toLaTeX(std::ostream &o) const
+{
+	o << val;
+}
+
 
 
 Expression Parameter::simplify() const
@@ -595,7 +666,7 @@ Expression Parameter::simplify() const
 	return *this;
 }
 
-bool Parameter::contains(const SymbolicMathElement &) const
+bool Parameter::contains(const SymbolicMathElement &a) const
 {
 	return compare(a);
 }
@@ -647,6 +718,13 @@ Expression Abs::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
+void Abs::toLaTeX(std::ostream &o) const
+{
+	o << "";
+
+
+}
+
 double ModelParameter::eval() const 
 {
 	return val;
@@ -683,6 +761,12 @@ Expression ModelParameter::substitute(const Expression &a, const Expression &b)
 		return b;
 
 	return *this;
+}
+
+void ModelParameter::toLaTeX(std::ostream &o) const
+{
+	o << this->name;
+
 }
 
 double Sin::eval() const
@@ -727,6 +811,13 @@ Expression Sin::substitute(const Expression &a, const Expression &b)
 		return b;
 
 	return ret;
+}
+
+void Sin::toLaTeX(std::ostream &o) const
+{
+	o << "\\sin\\left(";
+	A->toLaTeX(o);
+	o << "\\right)";
 }
 
 std::string Division::toString() const
@@ -788,6 +879,15 @@ bool Division::contains(const SymbolicMathElement &a) const
 		return true;
 
 	return false;
+}
+
+void Division::toLaTeX(std::ostream &o) const
+{
+	o << "//frac{";
+	A->toLaTeX(o);
+	o << "}{";
+	B->toLaTeX(o);
+	o << "}";
 }
 
 Expression operator+(const Expression & a, const Expression & b)
@@ -905,14 +1005,16 @@ Expression Cos::substitute(const Expression &a, const Expression &b)
 	return ret;
 }
 
+void Cos::toLaTeX(std::ostream &o) const
+{
+	o << "\\cos\\left(";
+	A->toLaTeX(o);
+	o << "\\right)";
+}
+
 Minus::Minus(const IExpression & a, const IExpression & b)
 	:Plus(a, -b)
 {
-}
-
-bool IExpression::compare(const Expression &b)
-{
-	return (this->getHash() == b.getHash());
 }
 
 void Function::reHash()
@@ -920,7 +1022,20 @@ void Function::reHash()
 	this->hash = ( type() & ~A->getHash());
 }
 
+
+bool Function::contains(const SymbolicMathElement &a) const
+{
+	return compare(a) | A->contains(a);
+}
+
+
+
 void TriangleOfPower::reHash()
 {
 	this->hash = ~(A->getHash() & type()) ^ (B->getHash() | type());
+}
+
+bool TriangleOfPower::contains(const SymbolicMathElement &a) const
+{
+	return compare(a) | A->contains(a) | B->contains(a);
 }

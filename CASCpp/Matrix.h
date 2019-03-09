@@ -11,6 +11,7 @@ typedef std::size_t uint; // std::size_t // needed for iteration
 // Simple flexible Matrix implementation
 
 
+
 template <class T> 
 class Matrix
 {

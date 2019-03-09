@@ -4,11 +4,12 @@
 #include <iostream>
 #include <exception>
 #include "IHashId.h"
+#include "ILaTeX.h"
 
 class IExpression;
 
 
-class SymbolicMathElement: public IHashId
+class SymbolicMathElement: public IHashId, public ILaTeX
 {
 public:
 	SymbolicMathElement();

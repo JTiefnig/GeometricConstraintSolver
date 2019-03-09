@@ -80,7 +80,49 @@ void ExpressionMatrix::reHash()
 {
 }
 
-Expression ExpressionMatrix::substitute(const Expression &, const Expression &)
+Expression ExpressionMatrix::substitute(const Expression &a, const Expression &b)
 {
-	return Expression();
+	if (compare(a))
+		return b;
+
+	ExpressionMatrix ret(*this);
+
+	for (int i = 0; i < this->m; i++)
+		for (int j = 0; j < this->n; j++)
+		{
+			ret[i][j] = this->substitute(a, b);
+		}
+
+	if (ret.compare(a))
+		return b;
+
+	return ret;
+}
+
+bool ExpressionMatrix::contains(const SymbolicMathElement &) const
+{
+	return false;
+}
+
+void ExpressionMatrix::toLaTeX(std::ostream &o) const
+{
+	o << "\\begin{matrix}";
+
+	for (int i = 0; i < this->m; i++)
+	{
+
+		for (int j = 0; j < this->n; j++)
+		{
+
+			(*this)[i][j].toLaTeX(o);
+
+			if (j < n - 1)
+				o << "&";
+
+		}
+		o << "\\\\"; // next line
+	}
+
+	o << "\\end{matrix}";
+
 }
