@@ -24,7 +24,7 @@ int main()
 
 	for (int i = 0; i < 2; i++)
 	{
-		d = Sin(Log(a,b)) + d + cos(b);
+		d = a+b;
 	}
 
 	cout << "before " << d.toString() << endl << endl;

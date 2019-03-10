@@ -4,11 +4,12 @@
 #include <iostream>
 #include <exception>
 #include "IHashId.h"
+#include "ILaTeX.h"
 
 class IExpression;
 
 
-class SymbolicMathElement: public IHashId
+class SymbolicMathElement: public IHashId, public ILaTeX
 {
 public:
 	SymbolicMathElement();
@@ -22,6 +23,7 @@ public:
 	//virtual void toLaTex(ostream&) const = 0; // Wirtes the equation in Latex format // very important for visualization later
 	virtual SymbolicMathElement* deepCopy() const = 0; // enforce deepcopy on this level;
 
+	virtual bool contains(const SymbolicMathElement&) const = 0;
 
 };
 

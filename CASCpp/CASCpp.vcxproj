@@ -151,6 +151,7 @@
     <ClInclude Include="Expression.h" />
     <ClInclude Include="ExpressionMatrix.h" />
     <ClInclude Include="IHashId.h" />
+    <ClInclude Include="ILaTeX.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="NumericTypes.h" />
     <ClInclude Include="stdafx.h" />

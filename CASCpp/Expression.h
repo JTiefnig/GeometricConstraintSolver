@@ -56,13 +56,7 @@ public:
 	} // Todo for const..
 
 
-	// think about hashing ... 00000 .. 
-	virtual bool compare(const Expression&);
-
 	virtual Expression substitute(const Expression&, const Expression&) =0;
-
-	
-	
 };
 
 
@@ -71,12 +65,9 @@ public:
 // an equation consists of two Expressions
 class Expression : public IExpression // Check 
 {
+	// No public access to the pointer 
 	IExpression * A;
 
-	// No public access to the pointer 
-
-
-	
 public:
 
 	// Constructors 
@@ -131,19 +122,20 @@ public:
 	// Rethink this! 
 	virtual IExpression & unWrap() override { return A->unWrap(); }
 	virtual const IExpression & unWrap() const override { return A->unWrap(); }
-
 	virtual IExpression * operator->()
 	{
 		return A;
 	}
 
-
-	// Geerbt über IExpression
 	virtual void reHash() override;
 
 	virtual hashid getHash() const override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
+
+	virtual void toLaTeX(std::ostream &) const;
 
 };
 
@@ -196,6 +188,10 @@ public:
 	virtual void reHash() override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
+
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -249,6 +245,10 @@ public:
 	virtual void reHash() override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
+
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -283,9 +283,13 @@ public:
 	virtual Expression partDif(ModelParameter & p) override;
 	virtual Expression simplify() const override;
 
-
 	virtual void reHash() override;
+
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
+
+	virtual void toLaTeX(std::ostream &) const override;
 
 };
 
@@ -309,6 +313,8 @@ public:
 
 	// Get name
 	// Get value // 
+
+	virtual bool contains(const SymbolicMathElement &) const override;
 };
 
 
@@ -360,6 +366,12 @@ public:
 
 	virtual void reHash() override;
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	
+
+	// Geerbt über Parameter
+	virtual void toLaTeX(std::ostream &) const override;
+
 };
 
 
@@ -414,6 +426,10 @@ public:
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
 
+
+	// Geerbt über Parameter
+	virtual void toLaTeX(std::ostream &) const override;
+
 };
 
 
@@ -441,6 +457,12 @@ public:
 	{
 		delete A;
 	}
+
+
+	// Geerbt über IExpression
+
+	virtual bool contains(const SymbolicMathElement &) const override;
+
 
 };
 
@@ -471,6 +493,9 @@ public:
 	virtual Expression simplify() const override;
 	
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	// Geerbt über Function
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -498,6 +523,8 @@ public:
 	virtual Expression simplify() const override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -523,6 +550,10 @@ public:
 	virtual Expression simplify() const override;
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+
+	// Geerbt über Function
+	virtual void toLaTeX(std::ostream &) const override;
 
 };
 
@@ -553,6 +584,7 @@ protected:
 
 	virtual void reHash() override;
 
+	virtual bool contains(const SymbolicMathElement &) const override;
 
 
 };
@@ -577,6 +609,8 @@ public:
 
 	// Geerbt über TriangleOfPower
 	virtual Expression substitute(const Expression &, const Expression &) override;
+
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 class Log : public TriangleOfPower
@@ -586,7 +620,6 @@ public:
 	Log(const IExpression & a, const IExpression & b)
 		:TriangleOfPower(a.deepCopy(), b.deepCopy())
 	{
-
 	}
 
 
@@ -597,9 +630,8 @@ public:
 	virtual IExpression * deepCopy() const override;
 	virtual Expression simplify() const override;
 	virtual Expression partDif(ModelParameter & p) override;
-
-	// Geerbt über TriangleOfPower
 	virtual Expression substitute(const Expression &, const Expression &) override;
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -620,8 +652,8 @@ public:
 	virtual Expression simplify() const override;
 	virtual Expression partDif(ModelParameter & p) override;
 
-	// Geerbt über TriangleOfPower
 	virtual Expression substitute(const Expression &, const Expression &) override;
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -638,6 +670,7 @@ public:
 	virtual std::string toString() const override;
 	virtual IExpression * deepCopy() const override;
 	virtual Expression partDif(ModelParameter & p) override;
+	virtual void toLaTeX(std::ostream &) const override;
 };
 
 
@@ -657,11 +690,9 @@ Expression operator*= (Expression& a, const  Expression& b);
 Expression operator/= (Expression& a, const  Expression& b);
 
 
+Expression operator^ (const Expression & a, const  Expression & b);
 
-
-Expression operator^ (const Expression& a, const  Expression& b);
-
-Expression ln(const Expression& e);
+Expression ln(const Expression & e);
 
 Expression sin(const Expression  & e);
 Expression cos(const Expression  & e);

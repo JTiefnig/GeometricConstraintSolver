@@ -25,3 +25,9 @@ hashid IHashId::getHash() const
 
 	return this->hash;
 }
+
+bool IHashId::compare(const IHashId &a) const
+{
+	return this->getHash() == a.getHash();
+}
+

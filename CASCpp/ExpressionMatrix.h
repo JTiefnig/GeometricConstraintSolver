@@ -42,5 +42,11 @@ public:
 
 	virtual Expression substitute(const Expression &, const Expression &) override;
 
+
+	// Geerbt über IExpression
+	virtual bool contains(const SymbolicMathElement &) const override;
+
+	virtual void toLaTeX(std::ostream &) const override;
+
 };
 
