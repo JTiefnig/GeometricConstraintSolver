@@ -22,15 +22,16 @@ int main()
 	Expression d = b;
 
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		d = Sin(Log(a,b)) + d + cos(b);
 	}
 
 	cout << "before " << d.toString() << endl << endl;
 	d = d.partDif(b);
+	d = d.substitute(Log(a, b), Sin(b));
 
-	auto dd = d.substitute(Sin(b), x);
+	auto dd = d.substitute(Sin(b), Cos(x));
 
 	cout << "after " << dd.toString() << endl << endl;
 
@@ -40,7 +41,7 @@ int main()
 	//d = Log(a, d);
 
 
-	//system("explorer http://google.com"); // todo c
+	//system("explorer http://google.com"); // todo c // so cool, dass ich dafür eine lösung gefunden hab hihi
 
 
 	
