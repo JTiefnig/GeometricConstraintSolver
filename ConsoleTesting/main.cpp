@@ -2,7 +2,6 @@
 #include <vector>
 #include <stdlib.h>
 #include "Matrix.h"
-
 #include "Expression.h"
 #include "ExpressionMatrix.h"
 
@@ -22,15 +21,15 @@ int main()
 	Expression d = b;
 
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 20; i++)
 	{
-		d = a+b;
+		d = a+b+d;
 	}
 
 	cout << "before " << d.toString() << endl << endl;
+	
+	d = d.substitute(a, Sin(b));
 	d = d.partDif(b);
-	d = d.substitute(Log(a, b), Sin(b));
-
 	auto dd = d.substitute(Sin(b), Cos(x));
 
 	cout << "after " << dd.toString() << endl << endl;
@@ -41,9 +40,7 @@ int main()
 	//d = Log(a, d);
 
 
-	//system("explorer http://google.com"); // todo c // so cool, dass ich dafür eine lösung gefunden hab hihi
-
-
+	//system("explorer http://google.com"); // todo c // so cool, dass ich dafür eine lösung gefunden hab hihi, johannes
 	
 	cout << "Eval: " << d.eval() << endl;
 

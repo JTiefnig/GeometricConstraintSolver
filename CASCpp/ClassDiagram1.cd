@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Equation" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAABAgAEAAAAAAAAAAAAAQAAQA=</HashCode>
+      <FileName>Equation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Condition" Collapsed="true">
+    <Position X="18.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Equation.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IExpression" Collapsed="true">
+    <Position X="15" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAQAAAAACAAAAIAAggAAAAAAAACAAAAIAAAAgA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Expression" Collapsed="true">
+    <Position X="18.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAkAAAQAEAAAAAAAAIgBggAAAIAAAASAAAgYAAAQAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Plus" Collapsed="true">
+    <Position X="20.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAgAAAAAAAAAAAAAAIgBQgAAAAAAAACACAAYBAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Minus" Collapsed="true">
+    <Position X="20.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Multiply" Collapsed="true">
+    <Position X="29.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAgAAAAAAAAAAAAAAKhBQgAAAAAAAACAAAAYBAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Division" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAgAAAAAAAAAAAAAAIgBAgAABAAAAACAAAAYAEAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Parameter" Collapsed="true">
+    <Position X="8.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Constant" Collapsed="true">
+    <Position X="7.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAIAAAAAAAAAAAAIgBAgAAAAAAAgCBAAgQAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ModelParameter" Collapsed="true">
+    <Position X="9" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAIAAAAAAAAAAAAYgBAgAAAAEAAACAAAAQAAACAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Function" Collapsed="true">
+    <Position X="25.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAIAAAAAAAAgAAIAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Abs" Collapsed="true">
+    <Position X="27.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAgAIABAgAAAAAAAACAAAAYAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sin" Collapsed="true">
+    <Position X="23" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAIEBAgAAAAAAAACAAAAYAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cos" Collapsed="true">
+    <Position X="25.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAIABAgAAAEAAAACAAAAYAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TriangleOfPower" Collapsed="true">
+    <Position X="14" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAgAAAAAAAAAAACAAEAIAEAAAQ=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Power" Collapsed="true">
+    <Position X="11.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAIABAgAAAAAAAADAAAAYAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Log" Collapsed="true">
+    <Position X="14" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAIABAgAAAgAAAACAAAAYAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Root" Collapsed="true">
+    <Position X="16.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAACAAAAIABAgAAAAAAAACAAAAYAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sqrt" Collapsed="true">
+    <Position X="16.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAgAAAQAAAACAAAAQAAAAAA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ExpressionMatrix" Collapsed="true">
+    <Position X="13" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAgAAAAAAAAAAAAAAIgBAgAAAAAQIACAAAAYAAAAAA=</HashCode>
+      <FileName>ExpressionMatrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IHashId" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAACAAAgAAAAAAIAAAAAAAAAAAAAQAQ=</HashCode>
+      <FileName>IHashId.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HashIdException" Collapsed="true">
+    <Position X="32.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>IHashId.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaTeXStream" Collapsed="true">
+    <Position X="35.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>ILaTeX.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ILaTeX" Collapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>ILaTeX.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Matrix&lt;T&gt;" Collapsed="true">
+    <Position X="4" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAoAAAAAAAAAAEABAAQAAAAGgAAAAOxAgAAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatrixXd" Collapsed="true">
+    <Position X="4" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector3d" Collapsed="true">
+    <Position X="3" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector2d" Collapsed="true">
+    <Position X="5.25" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MathException" Collapsed="true">
+    <Position X="32.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="INumericTypes" Collapsed="true">
+    <Position X="34" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAEgA=</HashCode>
+      <FileName>NumericTypes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Numeric&lt;T&gt;" Collapsed="true">
+    <Position X="35.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAA=</HashCode>
+      <FileName>NumericTypes.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SymbolicMathElement" Collapsed="true">
+    <Position X="14" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAABAAAAAABAgAAAABAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>SymbolicMathElement.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NotImplementedOperationException" Collapsed="true">
+    <Position X="34" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>SymbolicMathElement.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Typedef Name="hashid" Collapsed="true">
+    <Position X="32.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IHashId.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint" Collapsed="true">
+    <Position X="34" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Matrix.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="ModelParameterType" Collapsed="true">
+    <Position X="32.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIACAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Expression.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

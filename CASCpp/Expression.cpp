@@ -22,6 +22,12 @@ Expression::Expression(const std::string & id)
 }
  
 
+Expression::Expression(Expression&& temp)
+{
+	this->A = temp.A;
+	temp.A = NULL;
+}
+
 Expression::~Expression()
 {
 	if(A!=nullptr)

@@ -28,7 +28,11 @@ public:
 	Matrix<T>(int M, int N, const T& );
 	Matrix<T>();
 	Matrix(const Matrix<T>&);
-	~Matrix();
+	Matrix<T>(Matrix<T> &&); // Move constructor
+
+	Matrix<T>& operator=(Matrix<T>&& other);
+
+	virtual ~Matrix();
 
 	int rows() const;
 	int cols() const;
@@ -151,10 +155,28 @@ Matrix<T>::Matrix()
 }
 
 template<class T>
+inline Matrix<T>::Matrix(Matrix<T>&& temp)
+	:v(std::move(temp.v)), m(std::exchange(temp.m)), n(std::exchange(temp.n))
+{
+
+}
+
+template<class T>
+inline Matrix<T>& Matrix<T>::operator=(Matrix<T>&& other)
+{
+	v = std::move(other.v);
+	m = std::exchange(other.m);
+	n = std::exchange(other.n);
+
+	return *this;
+}
+
+template<class T>
 Matrix<T>::~Matrix()
 {
 
 }
+
 template<class T>
 Matrix<T>::Matrix(const Matrix & temp)
 	:m(temp.m), n(temp.n), v(temp.v)

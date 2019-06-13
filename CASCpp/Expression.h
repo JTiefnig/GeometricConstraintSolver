@@ -26,8 +26,6 @@ class ModelParameter;
 
 
 
-
-
 class IExpression : public SymbolicMathElement
 {
 
@@ -89,6 +87,8 @@ public:
 	{
 		this->A = a.A->deepCopy();
 	}
+
+	Expression(Expression&& temp);
 
 	Expression(double val);
 

@@ -1,0 +1,53 @@
+﻿<Window x:Class="MathOutputTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MathOutputTest"
+        xmlns:viewmodels="clr-namespace:MathOutputTest.ViewModels"
+        xmlns:formular="clr-namespace:WpfMath.Controls;assembly=WpfMath"
+        mc:Ignorable="d"
+        Title="Math Output Window" Height="450" Width="500">
+  <Window.Resources>
+    <viewmodels:DesignAppVM x:Key="DesignViewModel" />
+  </Window.Resources>
+  <Grid d:DataContext="{StaticResource DesignViewModel}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="60"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    
+    <!-- menu pannel -->
+    <DockPanel LastChildFill="False">
+      <Button Margin="5">
+        Generate
+      </Button>
+    </DockPanel>
+    
+    
+    
+   <!-- List of Equations-->
+    <ListView Grid.Row="1" ItemsSource="{Binding Equations}" HorizontalAlignment="Stretch">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="30"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <!--<Line HorizontalAlignment="Stretch" StrokeThickness="1" Stroke="Black"></Line>-->
+
+            <Separator VerticalAlignment="Top" Width="300"></Separator>
+            
+            <TextBlock Text="{Binding Name}" Typography.Capitals="SmallCaps" FontSize="15" VerticalAlignment="Center"/>
+
+            <formular:FormulaControl Grid.Row="1" Formula="{Binding LateX}" />
+          </Grid>
+          
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </Grid>
+</Window>
