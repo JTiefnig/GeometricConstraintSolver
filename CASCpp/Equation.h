@@ -8,16 +8,16 @@
 class Equation : public SymbolicMathElement
 {
 	// left and riht side of the Eqation
-	IExpression *L, *R;
+	 Expression L, R;
 
 
 
 public:
 	Equation();
 	// Not ideal
-	Equation(IExpression *left, IExpression *right);
+	
 	// better 
-	Equation(IExpression &left, IExpression &right);
+	Equation(const Expression &left, const Expression &right);
 	~Equation();
 
 
@@ -27,6 +27,14 @@ public:
 	virtual std::string toString() const override;
 
 	virtual IExpression * deepCopy() const override;
+
+
+	// Geerbt über SymbolicMathElement
+	virtual void reHash() override;
+
+	virtual void toLaTeX(std::ostream &) const override;
+
+	virtual bool contains(const SymbolicMathElement &) const override;
 
 };
 

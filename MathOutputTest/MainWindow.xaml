@@ -12,23 +12,27 @@
     <viewmodels:DesignAppVM x:Key="DesignViewModel" />
   </Window.Resources>
   <Grid d:DataContext="{StaticResource DesignViewModel}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="376*"/>
+      <ColumnDefinition Width="117*"/>
+    </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="60"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    
+
     <!-- menu pannel -->
-    <DockPanel LastChildFill="False">
-      <Button Margin="5">
+    <DockPanel LastChildFill="False" Grid.ColumnSpan="2" Margin="0,0,0.333,0">
+      <Button Padding="4" Margin="5" Command="{Binding TestCommand}">
         Generate
       </Button>
     </DockPanel>
-    
-    
-    
-   <!-- List of Equations-->
-    <ListView Grid.Row="1" ItemsSource="{Binding Equations}" HorizontalAlignment="Stretch">
+
+
+
+    <!-- List of Equations-->
+    <ListView Grid.Row="1" ItemsSource="{Binding Algebra.Equations, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Margin="0,0,0.333,-0.333">
       <ListView.ItemTemplate>
         <DataTemplate>
           <Grid>
@@ -40,12 +44,12 @@
             <!--<Line HorizontalAlignment="Stretch" StrokeThickness="1" Stroke="Black"></Line>-->
 
             <Separator VerticalAlignment="Top" Width="300"></Separator>
-            
+
             <TextBlock Text="{Binding Name}" Typography.Capitals="SmallCaps" FontSize="15" VerticalAlignment="Center"/>
 
             <formular:FormulaControl Grid.Row="1" Formula="{Binding LateX}" />
           </Grid>
-          
+
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>

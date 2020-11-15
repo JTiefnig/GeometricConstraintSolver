@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CASCwrapper;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 
 
@@ -14,9 +15,16 @@ namespace MathOutputTest.ViewModels
     public class ApplicationViewModel : INotifyPropertyChanged
     {
 
-        public ObservableCollection<Equation> Equations { get; set; }
+        public ObservableCollection<Equation> Equations
+        {
+            get;
+            private set;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public AlgebraSystem Algebra { get;  }
 
         public void OnPropertyChanged(string Name) => PropertyChanged(this, new PropertyChangedEventArgs(Name)); 
 
@@ -24,9 +32,23 @@ namespace MathOutputTest.ViewModels
         public ApplicationViewModel()
         {
             Equations = new ObservableCollection<Equation>();
+
+            Algebra = new AlgebraSystem();
         }
 
-        
+
+
+
+        #region Commands
+
+        public ICommand TestCommand => new RelayCommand(TestExecute);
+
+        void TestExecute()
+        {
+            Algebra.TestSetup();
+        }
+
+        #endregion
 
 
     }

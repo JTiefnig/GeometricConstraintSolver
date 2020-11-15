@@ -48,6 +48,7 @@ public:
 	virtual IExpression & unWrap() { return *this; }
 	virtual const IExpression & unWrap() const { return *this; }
 
+
 	virtual IExpression * operator->()
 	{
 		return this;
@@ -240,7 +241,6 @@ public:
 	virtual Expression partDif(ModelParameter & p) override;
 
 	virtual Expression simplify() const override;
-
 
 	virtual void reHash() override;
 

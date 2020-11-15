@@ -539,9 +539,9 @@ Expression Root::substitute(const Expression &a, const Expression &b)
 void Root::toLaTeX(std::ostream &o) const
 {
 	o << "\\sqrt[";
-	A->toLaTeX(o);
-	o << "]{";
 	B->toLaTeX(o);
+	o << "]{";
+	A->toLaTeX(o);
 	o << "}";
 }
 
@@ -620,7 +620,7 @@ Expression Sqrt::partDif(ModelParameter & p)
 void Sqrt::toLaTeX(std::ostream &o) const
 {
 	o << "\\sqrt {";
-	B->toLaTeX(o);
+	A->toLaTeX(o);
 	o << "}";
 }
 
